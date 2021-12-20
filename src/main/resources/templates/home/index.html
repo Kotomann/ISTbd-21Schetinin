@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html th:lang="${#locale.getLanguage()}" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="partials/head :: head">
+    <title></title>
+</head>
+<body>
+<div th:replace="partials/navbar :: navbar">&nbsp;</div>
+
+<div class="main-card card m-auto mt-4">
+    <table class="table table-borderless mb-0">
+        <thead class="text-center">
+        <tr>
+            <th></th>
+            <th th:each="d : ${week}">
+                <span th:text="${d.getName()}"></span>
+                <br />
+                <span th:text="${d.getDate()}"></span>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="h : ${calendar}">
+            <td th:text="${'00:' + h.getHour()}"></td>
+
+            <td th:each="d : ${h.getDaysOfWeek()}" th:classappend="${d.isEventExist() ? 'bg-success bg-opacity-25 text-center' : ''}">
+                <a th:if="${d.isEventExist()}" th:text="${d.getEventName()}" th:attr="data-bs-target=${'#modal' + d.getEventId()}" data-bs-toggle="modal" href="#"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-between m-1">
+        <div><a th:href="@{/(date=${prevweekdate})}" th:text="#{calendar.prevweek}" class="btn btn-primary"></a></div>
+        <div><a th:href="@{/events/create}" th:text="#{event.create}" class="btn btn-primary"></a></div>
+        <div><a th:href="@{/(date=${nextweekdate})}" th:text="#{calendar.nextweek}" class="btn btn-primary"></a></div>
+    </div>
+</div>
+
+<div th:each="e : ${events}" class="modal fade" th:id="${'modal' + e.getId()}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 th:text="${e.getName()}" class="modal-title"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><span th:text="#{event.field.name}"></span>: <span th:text="${e.getName()}"></span></p>
+                <p><span th:text="#{event.field.participants}"></span>: <span th:text="${e.getParticipants()}"></span></p>
+                <p><span th:text="#{event.field.date}"></span>: <span th:text="${e.getDate()}"></span></p>
+                <p><span th:text="#{event.field.starttime}"></span>: <span th:text="${e.getStartTime()}"></span></p>
+                <p><span th:text="#{event.field.endtime}"></span>: <span th:text="${e.getEndTime()}"></span></p>
+            </div>
+            <div class="modal-footer">
+                <a th:href="@{/events/{id}/edit(id=${e.getId()})}" th:text="#{event.edit}" class="btn btn-primary"></a>
+                <form th:method="DELETE" th:action="@{/events/{id}(id=${e.getId()})}" class="d-inline">
+                    <button th:text="#{event.delete}" type="submit" class="btn btn-danger"></button>
+                </form>
+                <button th:text="#{shared.back}" type="button" class="btn btn-secondary" data-bs-dismiss="modal"></button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html th:lang="${#locale.getLanguage()}" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="partials/head :: head">
+    <title></title>
+</head>
+<body>
+<div th:replace="partials/navbar :: navbar">&nbsp;</div>
+
+<div class="main-card card m-auto mt-4">
+    <div class="card-body">
+        <form th:method="PATCH" th:action="@{/events/{id}(id=${event.getId()})}" th:object="${event}">
+            <div class="mb-3">
+                <label th:for="${#ids.next('name')}" th:text="#{event.field.name}" class="form-label"></label>
+                <input th:field="*{name}" type="text" class="form-control" />
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="form-text text-danger"></div>
+            </div>
+            <div class="mb-3">
+                <label th:for="${#ids.next('participants')}" th:text="#{event.field.participants}" class="form-label"></label>
+                <input th:field="*{participants}" type="text" class="form-control" />
+                <div th:if="${#fields.hasErrors('participants')}" th:errors="*{participants}" class="form-text text-danger"></div>
+            </div>
+            <div class="mb-3">
+                <label th:for="${#ids.next('date')}" th:text="#{event.field.date}" class="form-label"></label>
+                <input th:field="*{date}" type="date" class="form-control" />
+                <div th:if="${#fields.hasErrors('date')}" th:errors="*{date}" class="form-text text-danger"></div>
+            </div>
+            <div class="mb-3">
+                <label th:for="${#ids.next('startTime')}" th:text="#{event.field.starttime}" class="form-label"></label>
+                <input th:field="*{startTime}" type="time" class="form-control" />
+                <div th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}" class="form-text text-danger"></div>
+            </div>
+            <div class="mb-3">
+                <label th:for="${#ids.next('endTime')}" th:text="#{event.field.endtime}" class="form-label"></label>
+                <input th:field="*{endTime}" type="time" class="form-control" />
+                <div th:if="${#fields.hasErrors('endTime')}" th:errors="*{endTime}" class="form-text text-danger"></div>
+            </div>
+            <button th:text="#{event.editconfirm}" type="submit" class="btn btn-success"></button>
+            <a th:href="@{/}" th:text="#{shared.back}" class="btn btn-secondary"></a>
+        </form>
+    </div>
+</div>
+</body>
+</html>
